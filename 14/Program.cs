@@ -8,6 +8,22 @@
         var game = new Game { MapSize = INPUT_TO_MAP_SIZE[input], Robots = ParseInput(input) };
         for (var i = 0; i < 100; i++) { Simulate(game); }
         Console.WriteLine($"Part 1 answer: {GetSafetyFactor(game)}");
+        var xmas = 6620;
+        Console.WriteLine($"Part 2 answer: {xmas}");
+        for (var i = 0; i < xmas - 100; i++) { Simulate(game); }
+        for (var y = 0; y < game.MapSize.Y; y++)
+        {
+            for (var x = 0; x < game.MapSize.X; x++)
+            {
+                var position = new Vector2(x, y);
+                if (game.Robots.Any(robot => robot.Position == position))
+                {
+                    Console.Write('*');
+                }
+                else { Console.Write('.'); }
+            }
+            Console.WriteLine('\n');
+        }
 
         Console.WriteLine("Done");
     }
