@@ -9,27 +9,33 @@
         var possible = 0;
         foreach (var pattern in parsedInput.TargetPatterns)
         {
-            if (IsPatternPossible(pattern, parsedInput.StockTowels))
+            if (IsPatternPossible(pattern, parsedInput.StockTowels) != 0)
             {
                 possible++;
             }
         }
         Console.WriteLine($"Part 1 answer: {possible}");
+        Console.WriteLine($"Part 2 answer: {parsedInput.TargetPatterns.Sum(pattern => IsPatternPossible(pattern, parsedInput.StockTowels))}");
 
         Console.WriteLine("Done");
     }
 
-    public static bool IsPatternPossible(string target, List<string> available)
+    public static Dictionary<string, long> IsPatternPossibleCache = new();
+
+    public static long IsPatternPossible(string target, List<string> available)
     {
-        if (target == "") { return true; }
+        if (target == "") { return 1; }
+        if (IsPatternPossibleCache.TryGetValue(target, out var cached)) { return cached; }
+        long result = 0;
         foreach (var segment in available)
         {
-            if (target.StartsWith(segment) && IsPatternPossible(target[segment.Length..], available))
+            if (target.StartsWith(segment))
             {
-                return true;
+                result += IsPatternPossible(target[segment.Length..], available);
             }
         }
-        return false;
+        IsPatternPossibleCache[target] = result;
+        return result;
     }
 
     public class ParsedInput
